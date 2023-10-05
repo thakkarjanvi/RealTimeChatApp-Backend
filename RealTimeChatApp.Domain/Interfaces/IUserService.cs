@@ -11,5 +11,7 @@ namespace RealTimeChatApp.Domain.Interfaces
     public interface IUserService
     {
         Task<UserDto> RegisterAsync(Register register);
+        Task<UserDto> AuthenticateAsync(Login login);
+        string GenerateJwtToken(UserDto user);
     }
 }
