@@ -1,0 +1,17 @@
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\bin\Debug\net6.0\RealTimeChatApp.DAL.deps.json
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\bin\Debug\net6.0\RealTimeChatApp.DAL.runtimeconfig.json
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\bin\Debug\net6.0\RealTimeChatApp.DAL.dll
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\bin\Debug\net6.0\RealTimeChatApp.DAL.pdb
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\bin\Debug\net6.0\RealTimeChatApp.Domain.dll
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\bin\Debug\net6.0\RealTimeChatApp.Domain.pdb
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\RealTimeChatApp.DAL.csproj.AssemblyReference.cache
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\RealTimeChatApp.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\RealTimeChatApp.DAL.AssemblyInfoInputs.cache
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\RealTimeChatApp.DAL.AssemblyInfo.cs
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\RealTimeChatApp.DAL.csproj.CoreCompileInputs.cache
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\RealTimeChatApp.DAL.csproj.CopyComplete
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\RealTimeChatApp.DAL.dll
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\refint\RealTimeChatApp.DAL.dll
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\RealTimeChatApp.DAL.pdb
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\RealTimeChatApp.DAL.genruntimeconfig.cache
+C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.DAL\obj\Debug\net6.0\ref\RealTimeChatApp.DAL.dll
