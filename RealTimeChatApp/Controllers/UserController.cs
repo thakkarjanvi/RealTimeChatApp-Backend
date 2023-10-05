@@ -41,5 +41,33 @@ namespace RealTimeChatApp.Controllers
                 return Conflict(new { error = "Registration failed because the email is already registered or user creation failed" });
             }
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] Login model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { error = "Login failed due to validation errors" });
+            }
+
+            var userDto = await _userService.AuthenticateAsync(model);
+            var token = _userService.GenerateJwtToken(userDto);
+
+            if (userDto != null)
+            {
+                return Ok(new
+                {
+                    message = "Login successfully done",
+                    token, // Get the actual JWT token from the authentication service
+                    profile = userDto
+                });
+            }
+            else
+            {
+                return Unauthorized(new { error = "Login failed due to incorrect credentials" });
+            }
+        }
+
+
     }
 }
