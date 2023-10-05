@@ -102,5 +102,20 @@ namespace RealTimeChatApp.DAL.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public async Task<IEnumerable<UserDto>> GetUsersAsync(string userId)
+        {
+            var currentUser = await _userManager.FindByIdAsync(userId);
+            var users = _userManager.Users
+                .Where(u => u.Id != currentUser.Id)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    Name = u.FullName
+                });
+
+            return users;
+        }
     }
 }
