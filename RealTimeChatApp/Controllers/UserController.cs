@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RealTimeChatApp.Domain.DTO;
 using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.Models;
+using System.Security.Claims;
 
 namespace RealTimeChatApp.Controllers
 {
@@ -67,7 +69,21 @@ namespace RealTimeChatApp.Controllers
                 return Unauthorized(new { error = "Login failed due to incorrect credentials" });
             }
         }
-
+        [HttpGet("users")]
+        [Authorize] // Requires authentication to access this endpoint
+        public async Task<IActionResult> GetUsers()
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var users = await _userService.GetUsersAsync(userId);
+                return Ok(new { message = "User list retrieved successfully", users });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
 
     }
 }

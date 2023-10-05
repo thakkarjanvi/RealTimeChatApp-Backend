@@ -13,5 +13,7 @@ namespace RealTimeChatApp.Domain.Interfaces
         Task<UserDto> RegisterAsync(Register register);
         Task<UserDto> AuthenticateAsync(Login login);
         string GenerateJwtToken(UserDto user);
+        Task<IEnumerable<UserDto>> GetUsersAsync(string userId);
+
     }
 }
