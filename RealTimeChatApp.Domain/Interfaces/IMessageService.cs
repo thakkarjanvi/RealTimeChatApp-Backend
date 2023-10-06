@@ -12,5 +12,6 @@ namespace RealTimeChatApp.Domain.Interfaces
     public interface IMessageService
     {
         Task<MessageDto> SendMessageAsync(Guid senderId, SendMessage sendMessage);
+        Task<MessageDto> EditMessageAsync(int messageId, Guid senderId, EditMessage editMessage);
     }
 }

@@ -57,5 +57,49 @@ namespace RealTimeChatApp.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
             }
         }
+        [HttpPut("{messageId}")]
+        public async Task<IActionResult> EditMessage(int messageId, [FromBody] EditMessage editMessage)
+        {
+            // Check if the editMessage object is provided in the request body
+            if (editMessage == null || string.IsNullOrWhiteSpace(editMessage.Content))
+            {
+                return BadRequest(new { error = "Invalid or empty message content" });
+            }
+
+            // Get the authenticated user's ID from the claims
+            var senderIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (senderIdClaim == null || !Guid.TryParse(senderIdClaim.Value, out Guid senderId))
+            {
+                return Unauthorized(new { error = "Invalid user authentication" });
+            }
+
+            // Call the service to edit the message
+            var editedMessage = await _messageService.EditMessageAsync(messageId, senderId, editMessage);
+
+            // Check if the message was found
+            if (editedMessage == null)
+            {
+                return NotFound(new { error = "Message not found" });
+            }
+
+            // Check if the authenticated user is the sender of the message
+            if (editedMessage.SenderId != senderId)
+            {
+                return Unauthorized(new { error = "You are not authorized to edit this message" });
+            }
+
+            // Return a successful response with the edited message details
+            return Ok(new
+            {
+                Message = "Message edited successfully",
+                MessageId = editedMessage.MessageId,
+                editedMessage.SenderId,
+                editedMessage.ReceiverId,
+                editedMessage.Content,
+                editedMessage.Timestamp
+                // Include other properties as needed
+            });
+        }
+
     }
 }

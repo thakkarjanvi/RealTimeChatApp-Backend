@@ -27,6 +27,17 @@ namespace RealTimeChatApp.DAL.Repository
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Message> GetMessageByIdAsync(int messageId)
+        {
+            return await _context.Messages.FindAsync(messageId);
+        }
+
+        public async Task UpdateMessageAsync(Message message)
+        {
+            _context.Messages.Update(message);
+            await _context.SaveChangesAsync();
+        }
     }
 }
 
