@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace RealTimeChatApp.Controllers
 {
-   [Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -69,6 +69,7 @@ namespace RealTimeChatApp.Controllers
                 return Unauthorized(new { error = "Login failed due to incorrect credentials" });
             }
         }
+
         [HttpGet("users")]
         [Authorize] // Requires authentication to access this endpoint
         public async Task<IActionResult> GetUsers()

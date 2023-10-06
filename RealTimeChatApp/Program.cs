@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RealTimeChatApp.DAL.Context;
+using RealTimeChatApp.DAL.Repository;
 using RealTimeChatApp.DAL.Services;
 using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.Models;
@@ -32,6 +33,9 @@ namespace RealTimeChatApp
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IMessageService, MessageService>();
+            builder.Services.AddScoped<IGenericRepository, GenericRepository>();
+
 
             builder.Services.AddDbContext<ApplicationDbContext>
             (options => options.UseSqlServer(builder.Configuration.GetConnectionString("MinimalChatApp")));
