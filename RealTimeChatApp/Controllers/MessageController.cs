@@ -57,7 +57,7 @@ namespace RealTimeChatApp.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
             }
         }
-        [HttpPut("{messageId}")]
+        [HttpPut("messages/{messageId}")]
         public async Task<IActionResult> EditMessage(int messageId, [FromBody] EditMessage editMessage)
         {
             // Check if the editMessage object is provided in the request body
@@ -100,6 +100,39 @@ namespace RealTimeChatApp.Controllers
                 // Include other properties as needed
             });
         }
+
+        [HttpDelete("messages/{messageId}")]
+        public async Task<IActionResult> DeleteMessage(int messageId)
+        {
+            try
+            {
+                var senderIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+                if (senderIdClaim == null || !Guid.TryParse(senderIdClaim.Value, out Guid senderId))
+                {
+                    return Unauthorized(new { error = "Invalid user authentication" });
+                }
+
+                var result = await _messageService.DeleteMessageAsync(messageId, senderId);
+
+                if (result == null)
+                {
+                    return NotFound(new { error = "Message not found" });
+                }
+
+                if (result.SenderId != senderId)
+                {
+                    return Unauthorized(new { error = "You are not authorized to delete this message" });
+                }
+
+                return Ok(new { Message = "Message deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
+            }
+        }
+
 
     }
 }

@@ -38,6 +38,12 @@ namespace RealTimeChatApp.DAL.Repository
             _context.Messages.Update(message);
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteMessageAsync(Message message)
+        {
+            _context.Messages.Remove(message);
+            await _context.SaveChangesAsync();
+        }
     }
 }
 

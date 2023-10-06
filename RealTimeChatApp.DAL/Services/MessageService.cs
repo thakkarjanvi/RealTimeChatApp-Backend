@@ -82,7 +82,32 @@ namespace RealTimeChatApp.DAL.Services
             };
 
             return messageDto;
-        
-    }
+        }
+
+        public async Task<MessageDto> DeleteMessageAsync(int messageId, Guid senderId)
+        {
+            var messageToDelete = await _genericRepository.GetMessageByIdAsync(messageId);
+
+            if (messageToDelete == null)
+            {
+                return null;
+            }
+
+            if (messageToDelete.SenderId != senderId)
+            {
+                return null;
+            }
+
+            await _genericRepository.DeleteMessageAsync(messageToDelete);
+            return new MessageDto
+            {
+                MessageId = messageToDelete.MessageId,
+                SenderId = messageToDelete.SenderId,
+                ReceiverId = messageToDelete.ReceiverId,
+                Content = messageToDelete.Content,
+                Timestamp = messageToDelete.Timestamp
+                // Include other properties as needed
+            };
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace RealTimeChatApp.Domain.Interfaces
 
         Task<Message> GetMessageByIdAsync(int messageId);
         Task UpdateMessageAsync(Message message);
+        Task DeleteMessageAsync(Message message);
     }
 }
