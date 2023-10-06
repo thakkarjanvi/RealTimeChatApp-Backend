@@ -15,5 +15,10 @@ namespace RealTimeChatApp.Domain.Interfaces
         Task<Message> GetMessageByIdAsync(int messageId);
         Task UpdateMessageAsync(Message message);
         Task DeleteMessageAsync(Message message);
+        IQueryable<Message> GetConversationMessages(Guid senderId, Guid receiverId);
+        // Task<Message> GetUserByIdAsync(Guid userId);
+
+        Task<User> GetUserByIdAsync(Guid userId);
+
     }
 }

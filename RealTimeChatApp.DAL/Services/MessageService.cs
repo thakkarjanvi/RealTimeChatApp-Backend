@@ -3,6 +3,7 @@ using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -109,5 +110,29 @@ namespace RealTimeChatApp.DAL.Services
                 // Include other properties as needed
             };
         }
+
+        public async Task<IEnumerable<MessageDto>> RetrieveConversationHistoryAsync(Guid senderId, Guid receiverId, DateTime? before, int count, string sort)
+        {
+            var messagesQuery = _genericRepository.GetConversationMessages(senderId, receiverId);
+
+            if (before.HasValue)
+            {
+                messagesQuery = messagesQuery.Where(m => m.Timestamp < before);
+            }
+
+            messagesQuery = sort == "asc" ? messagesQuery.OrderBy(m => m.Timestamp) : messagesQuery.OrderByDescending(m => m.Timestamp);
+
+            var conversationMessages = await messagesQuery.Take(count).Select(m => new MessageDto
+            {
+                MessageId = m.MessageId,
+                SenderId = m.SenderId,
+                ReceiverId = m.ReceiverId,
+                Content = m.Content,
+                Timestamp = m.Timestamp
+            }).ToListAsync();
+
+            return conversationMessages;
+        }
     }
 }
+
