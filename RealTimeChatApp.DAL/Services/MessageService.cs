@@ -52,6 +52,37 @@ namespace RealTimeChatApp.DAL.Services
             return messageDto;
         }
 
+        public async Task<MessageDto> EditMessageAsync(int messageId, Guid senderId, EditMessage editMessage)
+        {
+            var message = await _genericRepository.GetMessageByIdAsync(messageId);
 
+            if (message == null)
+            {
+                return null; // Message not found, handle this appropriately in the controller
+            }
+
+
+            if (message.SenderId != senderId)
+            {
+                return null; // Unauthorized, handle this appropriately in the controller
+            }
+
+            message.Content = editMessage.Content;
+            message.Timestamp = DateTime.Now;
+
+            await _genericRepository.UpdateMessageAsync(message);
+
+            var messageDto = new MessageDto
+            {
+                MessageId = message.MessageId,
+                SenderId = message.SenderId,
+                ReceiverId = message.ReceiverId,
+                Content = message.Content,
+                Timestamp = message.Timestamp
+            };
+
+            return messageDto;
+        
+    }
     }
 }
