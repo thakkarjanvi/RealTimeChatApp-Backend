@@ -13,10 +13,12 @@ namespace RealTimeChatApp.Controllers
     public class MessageController : ControllerBase
     {
         private readonly IMessageService _messageService;
+        private readonly IGenericRepository _genericRepository;
 
-        public MessageController(IMessageService messageService)
+        public MessageController(IMessageService messageService, IGenericRepository genericRepository)
         {
             _messageService = messageService;
+            _genericRepository = genericRepository;
         }
 
         [HttpPost("messages")]
@@ -132,6 +134,56 @@ namespace RealTimeChatApp.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
             }
         }
+
+        [HttpGet("messages")]
+public async Task<IActionResult> RetrieveConversationHistory(
+    [FromQuery] Guid userId,
+    [FromQuery] DateTime? before = null,
+    [FromQuery] int count = 20,
+    [FromQuery] string sort = "asc")
+{
+    try
+    {
+        // Get the authenticated user's ID from the token
+        var senderId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrWhiteSpace(senderId))
+        {
+            return Unauthorized(new { error = "Unauthorized access" });
+        }
+
+        // Find the user in the database
+        var user = await _genericRepository.GetUserByIdAsync(userId);
+
+        if (user == null)
+        {
+            return NotFound(new { error = "User not found" });
+        }
+
+        // Retrieve conversation messages based on the provided parameters
+        var conversationMessages = await _messageService.RetrieveConversationHistoryAsync(new Guid(senderId), userId, before, count, sort);
+
+        // Prepare the response body
+        var response = new
+        {
+            messages = conversationMessages.Select(m => new
+            {
+                id = m.MessageId,
+                senderId = m.SenderId,
+                receiverId = m.ReceiverId,
+                content = m.Content,
+                timestamp = m.Timestamp
+            })
+        };
+
+        return Ok(new { Message = "Conversation history retrieved successfully", response });
+    }
+    catch (Exception ex)
+    {
+        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
+    }
+}
+
 
 
     }

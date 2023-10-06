@@ -1,6 +1,8 @@
 ﻿using RealTimeChatApp.DAL.Context;
 using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.Models;
+using Microsoft.EntityFrameworkCore;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +45,21 @@ namespace RealTimeChatApp.DAL.Repository
         {
             _context.Messages.Remove(message);
             await _context.SaveChangesAsync();
+        }
+
+        public IQueryable<Message> GetConversationMessages(Guid senderId, Guid receiverId)
+        {
+            return _context.Messages
+                .Where(m => (m.SenderId == senderId && m.ReceiverId == receiverId) ||
+                            (m.SenderId == receiverId && m.ReceiverId == senderId));
+        }
+
+        public async Task<User> GetUserByIdAsync(Guid userId)
+        {
+            // Convert Guid to string for comparison with Id in the database
+            string userIdString = userId.ToString();
+
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userIdString);
         }
     }
 }

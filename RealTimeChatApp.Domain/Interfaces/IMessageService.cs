@@ -15,5 +15,6 @@ namespace RealTimeChatApp.Domain.Interfaces
         Task<MessageDto> EditMessageAsync(int messageId, Guid senderId, EditMessage editMessage);
 
         Task<MessageDto> DeleteMessageAsync(int messageId, Guid senderId);
+        Task<IEnumerable<MessageDto>> RetrieveConversationHistoryAsync(Guid senderId, Guid receiverId, DateTime? before, int count, string sort);
     }
 }
