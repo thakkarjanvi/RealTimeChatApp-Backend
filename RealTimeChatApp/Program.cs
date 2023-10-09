@@ -35,6 +35,7 @@ namespace RealTimeChatApp
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IMessageService, MessageService>();
             builder.Services.AddScoped<IGenericRepository, GenericRepository>();
+            builder.Services.AddSingleton<List<Message>>();
 
 
             builder.Services.AddDbContext<ApplicationDbContext>
