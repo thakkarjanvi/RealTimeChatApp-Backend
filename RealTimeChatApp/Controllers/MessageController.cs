@@ -166,7 +166,36 @@ namespace RealTimeChatApp.Controllers
             }
         }
 
+        [HttpGet("converstaion/search")]
+        public async Task<IActionResult> SearchConversationAsync([FromQuery] string query)
+        {
+            try
+            {
+                // Get the current user's ID from the claims
+                var userIdClaim = User.FindFirst("userId");
+                if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var currentUserId))
+                {
+                    return Unauthorized(new { error = "User not authenticated or invalid user ID" });
+                }
 
+                // Validate the request parameters
+                if (string.IsNullOrWhiteSpace(query))
+                {
+                    return BadRequest(new { error = "Invalid query parameter" });
+
+                }
+
+                // Call the service to search for messages
+                var messages = await _messageService.SearchConversationAsync(query, currentUserId);
+
+                return Ok(new { message = "Messages retrieved successfully", messages });
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions appropriately, log the error, and return an error response
+                return StatusCode(500, new { error = "Internal Server Error", details = ex.Message });
+            }
+        }
 
     }
 }
