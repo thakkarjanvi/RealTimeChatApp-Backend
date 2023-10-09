@@ -163,6 +163,25 @@ namespace RealTimeChatApp.DAL.Services
             return messageDtos;
         }
 
+        public async Task<List<MessageDto>> SearchConversationAsync(string query, Guid currentUserId)
+        {
+            var messages = await _dbContext.Messages
+                .Where(m => (m.SenderId == currentUserId || m.ReceiverId == currentUserId) && m.Content.Contains(query))
+                .ToListAsync();
+
+            var messageDtos = messages.Select(message => new MessageDto
+            {
+                MessageId = message.MessageId,
+                SenderId = message.SenderId,
+                ReceiverId = message.ReceiverId,
+                Content = message.Content,
+                Timestamp = message.Timestamp
+            }).ToList();
+
+            return messageDtos;
+        }
+    
+
     }
 }
 

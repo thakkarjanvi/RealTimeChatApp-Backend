@@ -120,7 +120,7 @@ namespace RealTimeChatApp
             app.UseAuthorization();
 
             // Request Logging Middleware
-             app.UseMiddleware<RequestLoggingMiddleware>();
+            app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.MapControllers();
 
