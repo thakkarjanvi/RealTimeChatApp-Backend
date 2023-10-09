@@ -8,6 +8,7 @@ using RealTimeChatApp.DAL.Repository;
 using RealTimeChatApp.DAL.Services;
 using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.Models;
+using RealTimeChatApp.Middleware;
 using System.Text;
 
 namespace RealTimeChatApp
@@ -36,6 +37,8 @@ namespace RealTimeChatApp
             builder.Services.AddScoped<IMessageService, MessageService>();
             builder.Services.AddScoped<IGenericRepository, GenericRepository>();
             builder.Services.AddSingleton<List<Message>>();
+            builder.Services.AddScoped<ILogService, LogService>();
+
 
 
             builder.Services.AddDbContext<ApplicationDbContext>
@@ -117,7 +120,7 @@ namespace RealTimeChatApp
             app.UseAuthorization();
 
             // Request Logging Middleware
-            // app.UseMiddleware<RequestLoggingMiddleware>();
+             app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.MapControllers();
 
