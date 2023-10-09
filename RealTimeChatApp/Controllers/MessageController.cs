@@ -4,6 +4,8 @@ using RealTimeChatApp.Domain.Models;
 using System.Net;
 using System.Security.Claims;
 using RealTimeChatApp.Domain.Interfaces;
+using RealTimeChatApp.Domain.DTO;
+using RealTimeChatApp.DAL.Services;
 
 namespace RealTimeChatApp.Controllers
 {
@@ -136,53 +138,33 @@ namespace RealTimeChatApp.Controllers
         }
 
         [HttpGet("messages")]
-public async Task<IActionResult> RetrieveConversationHistory(
-    [FromQuery] Guid userId,
-    [FromQuery] DateTime? before = null,
-    [FromQuery] int count = 20,
-    [FromQuery] string sort = "asc")
-{
-    try
-    {
-        // Get the authenticated user's ID from the token
-        var senderId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (string.IsNullOrWhiteSpace(senderId))
+        public async Task<IActionResult> RetrieveConversationHistory([FromQuery] ConversationHistoryDto queryParameters)
         {
-            return Unauthorized(new { error = "Unauthorized access" });
-        }
-
-        // Find the user in the database
-        var user = await _genericRepository.GetUserByIdAsync(userId);
-
-        if (user == null)
-        {
-            return NotFound(new { error = "User not found" });
-        }
-
-        // Retrieve conversation messages based on the provided parameters
-        var conversationMessages = await _messageService.RetrieveConversationHistoryAsync(new Guid(senderId), userId, before, count, sort);
-
-        // Prepare the response body
-        var response = new
-        {
-            messages = conversationMessages.Select(m => new
+            try
             {
-                id = m.MessageId,
-                senderId = m.SenderId,
-                receiverId = m.ReceiverId,
-                content = m.Content,
-                timestamp = m.Timestamp
-            })
-        };
+                // check the model Validations
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new { error = "Invalid request parameters." });
+                }
 
-        return Ok(new { Message = "Conversation history retrieved successfully", response });
-    }
-    catch (Exception ex)
-    {
-        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
-    }
-}
+                // Get the current user's ID from the JWT token
+                var currentUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                var messages = await _messageService.RetrieveConversationHistory(queryParameters, currentUserId);
+
+                if (messages == null || messages.Count <= 0)
+                {
+                    return Ok(new { error = "No more conversation found." });
+                }
+
+                return Ok(new { message = "Conversation history retrieved successfully", messages });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
 
 
 

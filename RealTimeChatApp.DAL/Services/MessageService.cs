@@ -1,4 +1,7 @@
-﻿using RealTimeChatApp.Domain.DTO;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using RealTimeChatApp.DAL.Context;
+using RealTimeChatApp.Domain.DTO;
 using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.Models;
 using System;
@@ -13,10 +16,14 @@ namespace RealTimeChatApp.DAL.Services
     public class MessageService : IMessageService
     {
         private readonly IGenericRepository _genericRepository;
+        private readonly List<Message> _messages;
+        private readonly ApplicationDbContext _dbContext;
 
-        public MessageService(IGenericRepository genericRepository)
+        public MessageService(IGenericRepository genericRepository, List<Message> messages, ApplicationDbContext dbContext)
         {
             _genericRepository = genericRepository;
+            _messages = messages;
+            _dbContext = dbContext;
         }
 
         public async Task<MessageDto> SendMessageAsync(Guid senderId, SendMessage sendMessage)
@@ -111,28 +118,51 @@ namespace RealTimeChatApp.DAL.Services
             };
         }
 
-        public async Task<IEnumerable<MessageDto>> RetrieveConversationHistoryAsync(Guid senderId, Guid receiverId, DateTime? before, int count, string sort)
+        public async Task<List<MessageDto>> RetrieveConversationHistory(ConversationHistoryDto queryParameters, Guid currentUserId)
         {
-            var messagesQuery = _genericRepository.GetConversationMessages(senderId, receiverId);
 
-            if (before.HasValue)
-            {
-                messagesQuery = messagesQuery.Where(m => m.Timestamp < before);
-            }
+            var query = _dbContext.Messages.Where(m =>
+                            (m.SenderId == currentUserId && m.ReceiverId == queryParameters.UserId) ||
+                            (m.SenderId == queryParameters.UserId && m.ReceiverId == currentUserId))
+                         .Where(m => m.Timestamp < queryParameters.Before).OrderByDescending(m => m.Timestamp)
+        .Take(queryParameters.Count);
 
-            messagesQuery = sort == "asc" ? messagesQuery.OrderBy(m => m.Timestamp) : messagesQuery.OrderByDescending(m => m.Timestamp);
 
-            var conversationMessages = await messagesQuery.Take(count).Select(m => new MessageDto
+
+            //query = query.OrderByDescending(m => m.Timestamp);
+
+            // Limit the number of messages retrieved based on the specified count
+            //if (queryParameters.Count > 0)
+            //{
+            //    query = query.Take(queryParameters.Count);
+            //}
+
+            // Sort the messages based on the specified sort order
+            //if (queryParameters.SortOrder == SortOrder.Ascending)
+            //{
+            //    query = query.OrderBy(m => m.Timestamp);
+            //}
+            //else
+            //{
+            //    query = query.OrderByDescending(m => m.Timestamp);
+            //}
+
+            // Execute the query and return the conversation history
+            var conversationMessages = query.ToList();
+
+            // Map messages to MessageDto objects
+            var messageDtos = conversationMessages.Select(m => new MessageDto
             {
                 MessageId = m.MessageId,
                 SenderId = m.SenderId,
                 ReceiverId = m.ReceiverId,
                 Content = m.Content,
                 Timestamp = m.Timestamp
-            }).ToListAsync();
+            }).ToList();
 
-            return conversationMessages;
+            return messageDtos;
         }
+
     }
 }
 
