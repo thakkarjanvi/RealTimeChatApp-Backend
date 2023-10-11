@@ -86,5 +86,19 @@ namespace RealTimeChatApp.Controllers
             }
         }
 
+        [HttpPost("google-login")]
+        public async Task<IActionResult> GoogleLogin(string email, string name)
+        {
+            // Implement validation logic for email and name if needed
+
+            var loginDto = await _userService.GoogleLoginAsync(email, name);
+            if (loginDto == null)
+            {
+                return BadRequest(new { message = "Google authentication failed" });
+            }
+
+            return Ok(loginDto);
+        }
+
     }
 }

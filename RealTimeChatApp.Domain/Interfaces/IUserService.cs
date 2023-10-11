@@ -14,6 +14,7 @@ namespace RealTimeChatApp.Domain.Interfaces
         Task<UserDto> AuthenticateAsync(Login login);
         string GenerateJwtToken(UserDto user);
         Task<IEnumerable<UserDto>> GetUsersAsync(string userId);
-
+        Task<LoginDto> GoogleLoginAsync(string email, string name);
+       
     }
 }

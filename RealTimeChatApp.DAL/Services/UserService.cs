@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.SqlServer.Server;
 using RealTimeChatApp.Domain.DTO;
 using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.Models;
@@ -117,5 +118,50 @@ namespace RealTimeChatApp.DAL.Services
 
             return users;
         }
+
+        public async Task<LoginDto> GoogleLoginAsync(string email, string name)
+        {
+            // Validate Google ID token
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(email, new GoogleJsonWebSignature.ValidationSettings());
+
+                // You can add additional checks here based on the payload data
+                // For example, check if the email is verified, check user roles, etc.
+
+                // If the token is valid, create or retrieve the user from the database
+                var user = await _userRepository.GetUserByEmail(email);
+                if (user == null)
+                {
+                    // If the user doesn't exist, create a new user in the database
+                    user = new User
+                    {
+                        Email = email,
+                        Name = name,
+                        // Set other user properties if necessary
+                    };
+                    await _userRepository.CreateUser(user);
+                }
+
+                // Generate JWT token
+                var userDto = new UserDto { Email = email, /* other properties */ };
+                var jwtToken = GenerateJwtToken(userDto);
+
+                var loginDto = new LoginDto
+                {
+                    Email = email,
+                    JwtToken = jwtToken
+                };
+
+                return loginDto;
+            }
+            catch (InvalidJwtException ex)
+            {
+                // Invalid Google ID token
+                // Handle the error (log it, return an error response, etc.)
+                return null;
+            }
+        }
+
     }
 }
