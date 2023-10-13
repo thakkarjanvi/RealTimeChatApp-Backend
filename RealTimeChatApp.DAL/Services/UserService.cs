@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Google.Apis.Auth;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.SqlServer.Server;
@@ -119,49 +120,54 @@ namespace RealTimeChatApp.DAL.Services
             return users;
         }
 
-        public async Task<LoginDto> GoogleLoginAsync(string email, string name)
+        public async Task<LoginDto> GoogleLoginAsync(string credential)
         {
-            // Validate Google ID token
             try
             {
-                var payload = await GoogleJsonWebSignature.ValidateAsync(email, new GoogleJsonWebSignature.ValidationSettings());
-
-                // You can add additional checks here based on the payload data
-                // For example, check if the email is verified, check user roles, etc.
-
-                // If the token is valid, create or retrieve the user from the database
-                var user = await _userRepository.GetUserByEmail(email);
-                if (user == null)
+                var settings = new GoogleJsonWebSignature.ValidationSettings
                 {
-                    // If the user doesn't exist, create a new user in the database
-                    user = new User
-                    {
-                        Email = email,
-                        Name = name,
-                        // Set other user properties if necessary
-                    };
-                    await _userRepository.CreateUser(user);
-                }
-
-                // Generate JWT token
-                var userDto = new UserDto { Email = email, /* other properties */ };
-                var jwtToken = GenerateJwtToken(userDto);
-
-                var loginDto = new LoginDto
-                {
-                    Email = email,
-                    JwtToken = jwtToken
+                    Audience = new List<string> { _configuration["JwtSettings:ClientId"] } // Set Google Client Id
                 };
 
-                return loginDto;
+                var payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
+                Console.WriteLine($"Audience Claim: {payload.Audience}");
+                Console.WriteLine($"Issuer Claim: {payload.Issuer}");
+
+                var user = await _userManager.FindByEmailAsync(payload.Email);
+
+                if (user != null)
+                {
+                    var token = GenerateJwtToken(new UserDto
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Name = user.FullName
+                    });
+
+                    var profile = new UserDto
+                    {
+                        Id = user.Id,
+                        Name = user.FullName,
+                        Email = user.Email
+                    };
+
+                    return new LoginDto
+                    {
+                        Email = user.Email,
+                        JwtToken = token,
+                        Profile = profile
+                    };
+                }
+                else
+                {
+                    throw new Exception("User not found."); // Throw custom exception if user is not found
+                }
             }
-            catch (InvalidJwtException ex)
+            catch (Exception ex)
             {
-                // Invalid Google ID token
-                // Handle the error (log it, return an error response, etc.)
-                return null;
+                Console.WriteLine($"Error: {ex.Message}");
+                throw; // Rethrow the exception to be handled in the controller if necessary
             }
         }
-
     }
 }

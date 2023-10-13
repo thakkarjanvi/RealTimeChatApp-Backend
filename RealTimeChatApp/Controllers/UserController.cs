@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using RealTimeChatApp.Domain.DTO;
 using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.Models;
@@ -12,10 +14,13 @@ namespace RealTimeChatApp.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private object _applicationSettings;
+        private string _googleClientId;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IOptions<AppSettings> applicationSettings)
         {
             _userService = userService;
+            _googleClientId = applicationSettings.Value.GoogleClientId;
         }
 
         [HttpPost("register")]
@@ -86,19 +91,27 @@ namespace RealTimeChatApp.Controllers
             }
         }
 
-        [HttpPost("google-login")]
-        public async Task<IActionResult> GoogleLogin(string email, string name)
+        [HttpPost("google-Login")]
+        public async Task<IActionResult> GoogleLoginAsync([FromBody] string credential)
         {
-            // Implement validation logic for email and name if needed
-
-            var loginDto = await _userService.GoogleLoginAsync(email, name);
-            if (loginDto == null)
+            try
             {
-                return BadRequest(new { message = "Google authentication failed" });
+                var loginDto = await _userService.GoogleLoginAsync(credential);
+
+                if (loginDto != null)
+                {
+                    return Ok(loginDto);
+                }
+                else
+                {
+                    return BadRequest(new { error = "User not found." });
+                }
             }
-
-            return Ok(loginDto);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return BadRequest(new { error = ex.Message });
+            }
         }
-
     }
-}
+} 
