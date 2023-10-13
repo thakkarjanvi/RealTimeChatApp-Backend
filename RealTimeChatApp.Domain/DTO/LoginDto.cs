@@ -10,5 +10,6 @@ namespace RealTimeChatApp.Domain.DTO
     {
         public string Email { get; set; }
         public string JwtToken { get; set; }
+        public UserDto Profile { get; set; }
     }
 }

@@ -44,10 +44,30 @@ namespace RealTimeChatApp
             builder.Services.AddDbContext<ApplicationDbContext>
             (options => options.UseSqlServer(builder.Configuration.GetConnectionString("MinimalChatApp")));
 
-            builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+            //builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+            //{
+            //    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+            //}));
+
+        //    builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+        //    {
+        //        build.WithOrigins("http://localhost:4200") // Allow requests only from this origin
+        //        .AllowAnyHeader()
+        //        .AllowAnyMethod()
+        //        .AllowCredentials();
+        //}));
+
+            builder.Services.AddCors(options =>
             {
-                build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-            }));
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder
+                        .WithOrigins("http://localhost:4200") // Allow requests only from this origin
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()); // Allow credentials (e.g., cookies, authorization headers)
+            });
+
+
 
 
             // Configures authentication services with JWT Bearer authentication.
@@ -114,7 +134,23 @@ namespace RealTimeChatApp
             }
 
             app.UseHttpsRedirection();
-            app.UseCors("corspolicy");
+            // app.UseCors("corspolicy");
+            app.UseCors("AllowSpecificOrigin");
+
+            // Configure CORS headers and policies here
+            app.UseCors(builder => builder
+                .WithOrigins("https://example.com")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials());
+
+            // Set Cross-Origin-Opener-Policy and Cross-Origin-Embedder-Policy headers
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+                context.Response.Headers.Add("Cross-Origin-Embedder-Policy", "require-corp");
+                await next.Invoke();
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();
