@@ -24,10 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Hubs\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RealTimeChatApp.DAL\RealTimeChatApp.DAL.csproj" />
     <ProjectReference Include="..\RealTimeChatApp.Domain\RealTimeChatApp.Domain.csproj" />
   </ItemGroup>

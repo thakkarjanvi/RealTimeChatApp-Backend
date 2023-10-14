@@ -29,6 +29,7 @@ namespace RealTimeChatApp.DAL.Services
             _configuration = configuration;
         }
 
+        //Register
         public async Task<UserDto> RegisterAsync(Register register)
         {
             var existingUser = await _userManager.FindByEmailAsync(register.Email);
@@ -63,6 +64,7 @@ namespace RealTimeChatApp.DAL.Services
             }
         }
 
+        //Login
         public async Task<UserDto> AuthenticateAsync(Login login)
         {
             var user = await _userManager.FindByEmailAsync(login.Email);
@@ -81,6 +83,8 @@ namespace RealTimeChatApp.DAL.Services
 
             return userDto;
         }
+
+        //Generate Token
 
         public string GenerateJwtToken(UserDto user)
         {
@@ -105,6 +109,8 @@ namespace RealTimeChatApp.DAL.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        //Retrieve User list
+
         public async Task<IEnumerable<UserDto>> GetUsersAsync(string userId)
         {
             var currentUser = await _userManager.FindByIdAsync(userId);
@@ -120,6 +126,7 @@ namespace RealTimeChatApp.DAL.Services
             return users;
         }
 
+        //Google Login
         public async Task<LoginDto> GoogleLoginAsync(string credential)
         {
             try

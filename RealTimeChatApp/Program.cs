@@ -8,6 +8,7 @@ using RealTimeChatApp.DAL.Repository;
 using RealTimeChatApp.DAL.Services;
 using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.Models;
+using RealTimeChatApp.Hubs;
 using RealTimeChatApp.Middleware;
 using System.Text;
 
@@ -38,6 +39,8 @@ namespace RealTimeChatApp
             builder.Services.AddScoped<IGenericRepository, GenericRepository>();
             builder.Services.AddSingleton<List<Message>>();
             builder.Services.AddScoped<ILogService, LogService>();
+            // Add SignalR Service
+            builder.Services.AddSignalR();
 
 
 
@@ -159,6 +162,8 @@ namespace RealTimeChatApp
             app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.MapControllers();
+
+            app.MapHub<ChatHub>("/chathub");
 
             app.Run();
         }
