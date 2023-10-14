@@ -23,6 +23,7 @@ namespace RealTimeChatApp.Controllers
             _googleClientId = applicationSettings.Value.GoogleClientId;
         }
 
+        //Register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] Register request)
         {
@@ -48,6 +49,8 @@ namespace RealTimeChatApp.Controllers
                 return Conflict(new { error = "Registration failed because the email is already registered or user creation failed" });
             }
         }
+
+        //Login
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login model)
@@ -75,6 +78,8 @@ namespace RealTimeChatApp.Controllers
             }
         }
 
+        //Retrive User List
+
         [HttpGet("users")]
         [Authorize] // Requires authentication to access this endpoint
         public async Task<IActionResult> GetUsers()
@@ -90,6 +95,8 @@ namespace RealTimeChatApp.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        //Google Login
 
         [HttpPost("google-Login")]
         public async Task<IActionResult> GoogleLoginAsync([FromBody] string credential)

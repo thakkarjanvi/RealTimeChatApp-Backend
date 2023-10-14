@@ -26,6 +26,8 @@ namespace RealTimeChatApp.DAL.Services
             _dbContext = dbContext;
         }
 
+
+        // Send Message
         public async Task<MessageDto> SendMessageAsync(Guid senderId, SendMessage sendMessage)
         {
             // Validate the incoming message
@@ -60,6 +62,8 @@ namespace RealTimeChatApp.DAL.Services
             return messageDto;
         }
 
+
+        //Edit Messsage
         public async Task<MessageDto> EditMessageAsync(int messageId, Guid senderId, EditMessage editMessage)
         {
             var message = await _genericRepository.GetMessageByIdAsync(messageId);
@@ -92,6 +96,7 @@ namespace RealTimeChatApp.DAL.Services
             return messageDto;
         }
 
+        //Delete Message
         public async Task<MessageDto> DeleteMessageAsync(int messageId, Guid senderId)
         {
             var messageToDelete = await _genericRepository.GetMessageByIdAsync(messageId);
@@ -118,6 +123,7 @@ namespace RealTimeChatApp.DAL.Services
             };
         }
 
+        //Retrieve Conversation History
         public async Task<List<MessageDto>> RetrieveConversationHistory(ConversationHistoryDto queryParameters, Guid currentUserId)
         {
 

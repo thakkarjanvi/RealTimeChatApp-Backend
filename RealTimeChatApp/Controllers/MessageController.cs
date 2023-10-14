@@ -6,6 +6,8 @@ using System.Security.Claims;
 using RealTimeChatApp.Domain.Interfaces;
 using RealTimeChatApp.Domain.DTO;
 using RealTimeChatApp.DAL.Services;
+using Microsoft.AspNetCore.SignalR;
+using RealTimeChatApp.Hubs;
 
 namespace RealTimeChatApp.Controllers
 {
@@ -16,13 +18,16 @@ namespace RealTimeChatApp.Controllers
     {
         private readonly IMessageService _messageService;
         private readonly IGenericRepository _genericRepository;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-        public MessageController(IMessageService messageService, IGenericRepository genericRepository)
+        public MessageController(IMessageService messageService, IGenericRepository genericRepository, IHubContext<ChatHub> hubContext)
         {
             _messageService = messageService;
             _genericRepository = genericRepository;
+            _hubContext = hubContext;
         }
 
+        // Send Message
         [HttpPost("messages")]
         public async Task<IActionResult> SendMessage([FromBody] SendMessage sendMessage)
         {
@@ -45,6 +50,9 @@ namespace RealTimeChatApp.Controllers
                 // Call the service to send the message
                 var messageDto = await _messageService.SendMessageAsync(new Guid(senderId), sendMessage);
 
+                // Notify clients about the new message using SignalR
+                await _hubContext.Clients.All.SendAsync("ReceiveMessage", messageDto);
+
                 // Return a successful response with the created message
                 return Ok(new
                 {
@@ -61,6 +69,8 @@ namespace RealTimeChatApp.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
             }
         }
+
+        //Edit Messsage
         [HttpPut("messages/{messageId}")]
         public async Task<IActionResult> EditMessage(int messageId, [FromBody] EditMessage editMessage)
         {
@@ -92,6 +102,9 @@ namespace RealTimeChatApp.Controllers
                 return Unauthorized(new { error = "You are not authorized to edit this message" });
             }
 
+            // Notify clients about the edited message using SignalR
+            await _hubContext.Clients.All.SendAsync("EditMessage", editedMessage.MessageId, editedMessage.Content);
+
             // Return a successful response with the edited message details
             return Ok(new
             {
@@ -105,6 +118,7 @@ namespace RealTimeChatApp.Controllers
             });
         }
 
+        //Delete Message
         [HttpDelete("messages/{messageId}")]
         public async Task<IActionResult> DeleteMessage(int messageId)
         {
@@ -129,6 +143,10 @@ namespace RealTimeChatApp.Controllers
                     return Unauthorized(new { error = "You are not authorized to delete this message" });
                 }
 
+                // Notify clients about the deleted message using SignalR
+                await _hubContext.Clients.All.SendAsync("DeleteMessage", messageId.ToString());
+
+
                 return Ok(new { Message = "Message deleted successfully" });
             }
             catch (Exception ex)
@@ -137,6 +155,7 @@ namespace RealTimeChatApp.Controllers
             }
         }
 
+        //Retrieve Conversation History
         [HttpGet("messages")]
         public async Task<IActionResult> RetrieveConversationHistory([FromQuery] ConversationHistoryDto queryParameters)
         {
