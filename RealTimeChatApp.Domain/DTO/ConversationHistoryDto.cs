@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace RealTimeChatApp.Domain.DTO
 {
@@ -13,6 +16,6 @@ namespace RealTimeChatApp.Domain.DTO
         public DateTime Before { get; set; } = DateTime.Now;
         public int Count { get; set; } = 20;
 
-        public string SortOrder { get; set; } = "asc";
+        public SortOrder SortOrder { get; set; } = SortOrder.Ascending;
     }
 }
