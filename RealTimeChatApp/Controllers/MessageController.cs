@@ -157,31 +157,39 @@ namespace RealTimeChatApp.Controllers
 
         //Retrieve Conversation History
         [HttpGet("messages")]
-        public async Task<IActionResult> RetrieveConversationHistory([FromQuery] ConversationHistoryDto queryParameters)
+        public async Task<IActionResult> GetConversationHistory([FromQuery] ConversationHistoryDto queryParameters)
         {
             try
             {
-                // check the model Validations
-                if (!ModelState.IsValid)
+                // Get the current user's ID from the token
+                var currentUserIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (currentUserIdClaim == null || !Guid.TryParse(currentUserIdClaim.Value, out var currentUserId))
                 {
-                    return BadRequest(new { error = "Invalid request parameters." });
+                    return Unauthorized();
                 }
 
-                // Get the current user's ID from the JWT token
-                var currentUserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var messages = await _messageService.GetConversationHistoryAsync(queryParameters,currentUserId);
 
-                var messages = await _messageService.RetrieveConversationHistory(queryParameters, currentUserId);
+                //if (messages.Count == 0)
+                //{
+                //    return NotFound();
+                //}
 
-                if (messages == null || messages.Count <= 0)
+                var messageDtos = messages.Select(message => new Message
                 {
-                    return Ok(new { error = "No more conversation found." });
-                }
+                    MessageId = message.MessageId,
+                    SenderId = message.SenderId,
+                    ReceiverId = message.ReceiverId,
+                    Content = message.Content,
+                    Timestamp = message.Timestamp
+                }).ToList();
 
-                return Ok(new { message = "Conversation history retrieved successfully", messages });
+                return Ok(new { Message = "Conversation history retrieved successfully", Messages = messageDtos });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = ex.Message });
+                // Log the exception if necessary
+                return StatusCode(500, ex.StackTrace);
             }
         }
 
