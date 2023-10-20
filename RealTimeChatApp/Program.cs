@@ -62,12 +62,13 @@ namespace RealTimeChatApp
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder
-                        .WithOrigins("http://localhost:4200") // Allow requests only from this origin
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials()); // Allow credentials (e.g., cookies, authorization headers)
+                options.AddPolicy("AllowSpecificOrigin", builder =>
+                {
+                    builder.AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .WithOrigins("http://localhost:4200") 
+                           .AllowCredentials();
+                }); 
             });
 
 
@@ -142,7 +143,7 @@ namespace RealTimeChatApp
 
             // Configure CORS headers and policies here
             app.UseCors(builder => builder
-                .WithOrigins("https://example.com")
+                .WithOrigins("http://localhost:4200")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials());

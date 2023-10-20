@@ -51,7 +51,7 @@ namespace RealTimeChatApp.Controllers
                 var messageDto = await _messageService.SendMessageAsync(new Guid(senderId), sendMessage);
 
                 // Notify clients about the new message using SignalR
-                await _hubContext.Clients.All.SendAsync("ReceiveMessage", messageDto);
+                await _hubContext.Clients.All.SendAsync("ReceiveMessage", sendMessage.Content);
 
                 // Return a successful response with the created message
                 return Ok(new
@@ -196,6 +196,8 @@ namespace RealTimeChatApp.Controllers
         [HttpGet("converstaion/search")]
         public async Task<IActionResult> SearchConversationAsync([FromQuery] string query)
         {
+
+
             try
             {
                 // Get the current user's ID from the claims
