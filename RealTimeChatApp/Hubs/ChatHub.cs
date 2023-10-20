@@ -7,18 +7,10 @@ namespace RealTimeChatApp.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessage(Message message)
+        public async Task SendMessage(string message)
         {
-            try
-            {
-                // Your message handling logic
-                await Clients.All.SendAsync("ReceiveMessage", message);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions and log errors
-                Console.WriteLine($"Error in SendMessage: {ex.Message}");
-            }
+            // Implementation for sending messages
+            await Clients.All.SendAsync("ReceiveMessage", message);
         }
 
         public async Task EditMessage(string content, string id)
