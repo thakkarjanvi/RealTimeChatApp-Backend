@@ -193,15 +193,15 @@ namespace RealTimeChatApp.Controllers
             }
         }
 
-        [HttpGet("converstaion/search")]
+        // Search Conversation
+
+        [HttpGet("messages/conversation/search")]
         public async Task<IActionResult> SearchConversationAsync([FromQuery] string query)
         {
-
-
             try
             {
                 // Get the current user's ID from the claims
-                var userIdClaim = User.FindFirst("userId");
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
                 if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var currentUserId))
                 {
                     return Unauthorized(new { error = "User not authenticated or invalid user ID" });
@@ -211,7 +211,6 @@ namespace RealTimeChatApp.Controllers
                 if (string.IsNullOrWhiteSpace(query))
                 {
                     return BadRequest(new { error = "Invalid query parameter" });
-
                 }
 
                 // Call the service to search for messages
