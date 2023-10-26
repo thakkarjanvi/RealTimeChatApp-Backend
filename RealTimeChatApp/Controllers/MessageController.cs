@@ -216,7 +216,21 @@ namespace RealTimeChatApp.Controllers
                 // Call the service to search for messages
                 var messages = await _messageService.SearchConversationAsync(query, currentUserId);
 
-                return Ok(new { message = "Messages retrieved successfully", messages });
+                if(messages == null || messages.Count() == 0)
+                {
+                    return NotFound(new { Message = "Messages not Found" });
+                }
+
+                var messageDtos = messages.Select(message => new Message
+                {
+                    MessageId = message.MessageId,
+                    SenderId = message.SenderId,
+                    ReceiverId = message.ReceiverId,
+                    Content = message.Content,
+                    Timestamp = message.Timestamp
+                }).ToList();
+
+                return Ok(new { Message = "Messages retrieved successfully", Messages = messageDtos });
             }
             catch (Exception ex)
             {
