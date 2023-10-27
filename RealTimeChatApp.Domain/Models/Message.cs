@@ -13,6 +13,13 @@ namespace RealTimeChatApp.Domain.Models
         public Guid ReceiverId { get; set; }
         public string Content { get; set; }
         public DateTime Timestamp { get; set; }
+        public int? ThreadId { get; set; }
+
+        // Navigation property for self-referencing relationship
+        public Message? Thread { get; set; }
+
+        // One-to-many relationship with child messages
+        public List<Message> Messages { get; set; }
 
     }
 }

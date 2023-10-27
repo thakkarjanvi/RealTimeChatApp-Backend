@@ -10,5 +10,6 @@ namespace RealTimeChatApp.Domain.Models
     {
         public Guid ReceiverId { get; set; }
         public string Content { get; set; }
+        public int? ThreadId { get; set; }
     }
 }

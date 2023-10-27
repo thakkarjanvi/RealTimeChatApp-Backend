@@ -239,5 +239,17 @@ namespace RealTimeChatApp.Controllers
             }
         }
 
+        [HttpGet("messages/{threadId}")]
+        public async Task<IActionResult> GetThreadMessagesAsync(int threadId)
+        {
+            var messages = await _messageService.GetThreadMessagesAsync(threadId);
+            if (messages == null || messages.Count == 0)
+            {
+                return NotFound($"No messages found for thread with ID: {threadId}");
+            }
+
+            return Ok(messages);
+        }
+
     }
 }
