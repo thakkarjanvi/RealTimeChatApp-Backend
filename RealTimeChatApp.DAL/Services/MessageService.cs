@@ -46,7 +46,8 @@ namespace RealTimeChatApp.DAL.Services
                 SenderId = senderId,
                 ReceiverId = sendMessage.ReceiverId,
                 Content = sendMessage.Content,
-                Timestamp = DateTime.Now
+                Timestamp = DateTime.Now,
+                ThreadId = sendMessage.ThreadId,
             };
 
             // Add the message to the repository and save changes
@@ -130,20 +131,8 @@ namespace RealTimeChatApp.DAL.Services
         //Retrieve Conversation History
         public async Task<List<Message>> GetConversationHistoryAsync(ConversationHistoryDto queryParameters, Guid currentUserId)
         {
-            //IQueryable<Message?> query;
-            //    query = _dbContext.Messages
-            //    .Where(m =>
-            //        (m.SenderId == currentUserId && m.ReceiverId == queryParameters.UserId) ||
-            //        (m.SenderId == queryParameters.UserId && m.ReceiverId == currentUserId))
-            //    .Where(m => m.Timestamp <= queryParameters.Before)
-            //    .OrderByDescending(m => m.Timestamp);
-            // var targetUserId = new Guid(queryParameters.UserId.ToString());
-
-            Console.WriteLine("target idf: " + queryParameters.UserId);
-
-
             var query = _dbContext.Messages
-                 .Where(m =>
+                 .Where(m => (m.ThreadId == null) &&
                     (m.SenderId == currentUserId && m.ReceiverId == queryParameters.UserId) ||
                     (m.SenderId == queryParameters.UserId && m.ReceiverId == currentUserId))
                 .Where(m => m.Timestamp <= queryParameters.Before);
@@ -183,6 +172,11 @@ namespace RealTimeChatApp.DAL.Services
             }).ToList();
             
             return messageDtos;
+        }
+
+        public async Task<List<Message?>> GetThreadMessagesAsync(int threadId)
+        {
+            return _dbContext.Messages.Where(m => m.ThreadId == threadId).ToList();
         }
     }
 }
