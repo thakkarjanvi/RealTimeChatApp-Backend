@@ -39,16 +39,28 @@ namespace RealTimeChatApp.DAL.Services
             {
                 throw new ArgumentException("Invalid message data.");
             }
-
-            // Create a new message entity
-            var message = new Message
+            Message message;
+            if(sendMessage.ThreadId != null)
             {
-                SenderId = senderId,
-                ReceiverId = sendMessage.ReceiverId,
-                Content = sendMessage.Content,
-                Timestamp = DateTime.Now,
-                ThreadId = sendMessage.ThreadId,
-            };
+                message = new Message
+                {
+                    SenderId = senderId,
+                    ReceiverId = sendMessage.ReceiverId,
+                    Content = sendMessage.Content,
+                    Timestamp = DateTime.Now,
+                };
+            }
+            else
+            {
+                message = new Message
+                {
+                    SenderId = senderId,
+                    ReceiverId = sendMessage.ReceiverId,
+                    Content = sendMessage.Content,
+                    Timestamp = DateTime.Now,
+                    ThreadId = sendMessage.ThreadId,
+                };
+            }
 
             // Add the message to the repository and save changes
             await _genericRepository.AddMessageAsync(message);
