@@ -240,7 +240,7 @@ namespace RealTimeChatApp.Controllers
         }
 
         [HttpGet("messages/{threadId}")]
-        public async Task<IActionResult> GetThreadMessagesAsync(int threadId)
+        public async Task<IActionResult> GetThreadMessagesAsync([FromRoute] int threadId)
         {
             var messages = await _messageService.GetThreadMessagesAsync(threadId);
             if (messages == null || messages.Count == 0)
