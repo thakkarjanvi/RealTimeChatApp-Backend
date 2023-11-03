@@ -14,7 +14,7 @@ namespace RealTimeChatApp.Domain.DTO
     {
         public Guid UserId { get; set; }
         public DateTime Before { get; set; } = DateTime.Now;
-        public int Count { get; set; } = 100;
+        public int Count { get; set; } = 20;
         public SortOrder SortOrder { get; set; } = SortOrder.Ascending;
     }
 }

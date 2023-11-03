@@ -37,6 +37,7 @@ namespace RealTimeChatApp.Controllers
                 if (sendMessage == null || sendMessage.ReceiverId == Guid.Empty || string.IsNullOrWhiteSpace(sendMessage.Content))
                 {
                     return BadRequest(new { error = "Message sending failed due to validation errors" });
+
                 }
 
                 // Get the authenticated user's ID from the token

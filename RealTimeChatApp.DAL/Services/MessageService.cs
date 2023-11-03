@@ -40,7 +40,7 @@ namespace RealTimeChatApp.DAL.Services
                 throw new ArgumentException("Invalid message data.");
             }
             Message message;
-            if(sendMessage.ThreadId != null)
+            if(sendMessage.ThreadId == null)
             {
                 message = new Message
                 {
