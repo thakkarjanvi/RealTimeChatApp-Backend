@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+//using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace RealTimeChatApp.DAL.Context
@@ -19,6 +20,10 @@ namespace RealTimeChatApp.DAL.Context
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Log> LogEntries { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<GroupMember> GroupMembers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +39,21 @@ namespace RealTimeChatApp.DAL.Context
             // Primary key configuration (assuming MessageId is primary key for Message entity)
             modelBuilder.Entity<Message>()
                 .HasKey(m => m.MessageId);
+
+
+            modelBuilder.Entity<GroupMember>()
+                 .HasKey(gu => new { gu.UserId, gu.GroupId });
+
+            modelBuilder.Entity<GroupMember>()
+                .HasOne(u => u.User)
+                .WithMany(gu => gu.GroupMembers)
+                .HasForeignKey(u => u.UserId);
+
+            modelBuilder.Entity<GroupMember>()
+                .HasOne(g => g.Group)
+                .WithMany(gu => gu.Members)
+                .HasForeignKey(g => g.GroupId);
+
         }
     }
 }

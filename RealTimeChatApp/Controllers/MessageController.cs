@@ -37,7 +37,6 @@ namespace RealTimeChatApp.Controllers
                 if (sendMessage == null || sendMessage.ReceiverId == Guid.Empty || string.IsNullOrWhiteSpace(sendMessage.Content))
                 {
                     return BadRequest(new { error = "Message sending failed due to validation errors" });
-
                 }
 
                 // Get the authenticated user's ID from the token
@@ -115,7 +114,7 @@ namespace RealTimeChatApp.Controllers
                 editedMessage.ReceiverId,
                 editedMessage.Content,
                 editedMessage.Timestamp
-                // Include other properties as needed
+
             });
         }
 
@@ -128,6 +127,7 @@ namespace RealTimeChatApp.Controllers
                 var senderIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
                 if (senderIdClaim == null || !Guid.TryParse(senderIdClaim.Value, out Guid senderId))
+
                 {
                     return Unauthorized(new { error = "Invalid user authentication" });
                 }
@@ -239,6 +239,8 @@ namespace RealTimeChatApp.Controllers
                 return StatusCode(500, new { error = "Internal Server Error", details = ex.Message });
             }
         }
+
+        // Thread Message
 
         [HttpGet("messages/{threadId}")]
         public async Task<IActionResult> GetThreadMessagesAsync([FromRoute] int threadId)
