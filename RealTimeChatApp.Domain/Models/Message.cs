@@ -21,5 +21,7 @@ namespace RealTimeChatApp.Domain.Models
         // One-to-many relationship with child messages
         public List<Message> Messages { get; set; }
 
+        
+
     }
 }

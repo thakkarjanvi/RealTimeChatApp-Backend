@@ -155,6 +155,39 @@ namespace RealTimeChatApp.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("RealTimeChatApp.Domain.Models.Group", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("RealTimeChatApp.Domain.Models.GroupMember", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.HasKey("UserId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupMembers");
+                });
+
             modelBuilder.Entity("RealTimeChatApp.Domain.Models.Log", b =>
                 {
                     b.Property<int>("Id")
@@ -195,6 +228,9 @@ namespace RealTimeChatApp.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ReceiverId")
                         .HasColumnType("uniqueidentifier");
 
@@ -208,6 +244,8 @@ namespace RealTimeChatApp.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("MessageId");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("ThreadId");
 
@@ -334,8 +372,31 @@ namespace RealTimeChatApp.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RealTimeChatApp.Domain.Models.GroupMember", b =>
+                {
+                    b.HasOne("RealTimeChatApp.Domain.Models.Group", "Group")
+                        .WithMany("Members")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RealTimeChatApp.Domain.Models.User", "User")
+                        .WithMany("GroupMembers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("RealTimeChatApp.Domain.Models.Message", b =>
                 {
+                    b.HasOne("RealTimeChatApp.Domain.Models.Group", null)
+                        .WithMany("Messages")
+                        .HasForeignKey("GroupId");
+
                     b.HasOne("RealTimeChatApp.Domain.Models.Message", "Thread")
                         .WithMany("Messages")
                         .HasForeignKey("ThreadId");
@@ -343,9 +404,21 @@ namespace RealTimeChatApp.DAL.Migrations
                     b.Navigation("Thread");
                 });
 
+            modelBuilder.Entity("RealTimeChatApp.Domain.Models.Group", b =>
+                {
+                    b.Navigation("Members");
+
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("RealTimeChatApp.Domain.Models.Message", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("RealTimeChatApp.Domain.Models.User", b =>
+                {
+                    b.Navigation("GroupMembers");
                 });
 #pragma warning restore 612, 618
         }
