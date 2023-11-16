@@ -35,10 +35,12 @@ namespace RealTimeChatApp
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IMessageService, MessageService>();
-            builder.Services.AddScoped<IGenericRepository, GenericRepository>();
+            builder.Services.AddTransient<IMessageService, MessageService>();
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            //builder.Services.AddScoped<IGenericRepository, GenericRepository>();
             builder.Services.AddSingleton<List<Message>>();
             builder.Services.AddScoped<ILogService, LogService>();
+
             // Add SignalR Service
             builder.Services.AddSignalR();
 

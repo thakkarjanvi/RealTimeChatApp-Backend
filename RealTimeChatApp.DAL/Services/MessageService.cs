@@ -12,22 +12,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using RealTimeChatApp.DAL.Repository;
 
 namespace RealTimeChatApp.DAL.Services
 {
     public class MessageService : IMessageService
     {
-        private readonly IGenericRepository _genericRepository;
+        private readonly IGenericRepository<Message> _genericRepository;
         private readonly List<Message> _messages;
         private readonly ApplicationDbContext _dbContext;
-        
 
-        public MessageService(IGenericRepository genericRepository, List<Message> messages, ApplicationDbContext dbContext)
+
+        public MessageService(IGenericRepository<Message> genericRepository, List<Message> messages, ApplicationDbContext dbContext)
         {
             _genericRepository = genericRepository;
             _messages = messages;
             _dbContext = dbContext;
-            
+
         }
 
 
@@ -40,7 +41,7 @@ namespace RealTimeChatApp.DAL.Services
                 throw new ArgumentException("Invalid message data.");
             }
             Message message;
-            if(sendMessage.ThreadId == null)
+            if (sendMessage.ThreadId == null)
             {
                 message = new Message
                 {
@@ -71,7 +72,7 @@ namespace RealTimeChatApp.DAL.Services
             {
                 MessageId = message.MessageId,
                 SenderId = message.SenderId,
-                ReceiverId = message.ReceiverId,
+                ReceiverId = message.ReceiverId ?? Guid.Empty,
                 Content = message.Content,
                 Timestamp = message.Timestamp
             };
@@ -83,7 +84,7 @@ namespace RealTimeChatApp.DAL.Services
         //Edit Messsage
         public async Task<MessageDto> EditMessageAsync(int messageId, Guid senderId, EditMessage editMessage)
         {
-            var message = await _genericRepository.GetMessageByIdAsync(messageId);
+            var message = await _genericRepository.GetByIdAsync(messageId);
 
             if (message == null)
             {
@@ -105,7 +106,7 @@ namespace RealTimeChatApp.DAL.Services
             {
                 MessageId = message.MessageId,
                 SenderId = message.SenderId,
-                ReceiverId = message.ReceiverId,
+                ReceiverId = message.ReceiverId ?? Guid.Empty,
                 Content = message.Content,
                 Timestamp = message.Timestamp
             };
@@ -133,7 +134,7 @@ namespace RealTimeChatApp.DAL.Services
             {
                 MessageId = messageToDelete.MessageId,
                 SenderId = messageToDelete.SenderId,
-                ReceiverId = messageToDelete.ReceiverId,
+                ReceiverId = messageToDelete.ReceiverId ?? Guid.Empty,
                 Content = messageToDelete.Content,
                 Timestamp = messageToDelete.Timestamp
                 // Include other properties as needed
@@ -162,7 +163,7 @@ namespace RealTimeChatApp.DAL.Services
                 query = query.Take(queryParameters.Count);
             }
 
-            var messages =  query.ToList();
+            var messages = query.ToList();
 
             return messages;
         }
@@ -178,11 +179,11 @@ namespace RealTimeChatApp.DAL.Services
             {
                 MessageId = message.MessageId,
                 SenderId = message.SenderId,
-                ReceiverId = message.ReceiverId,
+                ReceiverId = message.ReceiverId ?? Guid.Empty,
                 Content = message.Content,
                 Timestamp = message.Timestamp
             }).ToList();
-            
+
             return messageDtos;
         }
 
@@ -192,4 +193,3 @@ namespace RealTimeChatApp.DAL.Services
         }
     }
 }
-

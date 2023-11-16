@@ -10,3 +10,15 @@ C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\Real
 C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.Domain\obj\Debug\net6.0\refint\RealTimeChatApp.Domain.dll
 C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.Domain\obj\Debug\net6.0\RealTimeChatApp.Domain.pdb
 C:\Users\admin\Documents\Internship\RealTimeChatApp-Backend\RealTimeChatApp\RealTimeChatApp.Domain\obj\Debug\net6.0\ref\RealTimeChatApp.Domain.dll
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\bin\Debug\net6.0\RealTimeChatApp.Domain.deps.json
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\bin\Debug\net6.0\RealTimeChatApp.Domain.dll
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\bin\Debug\net6.0\RealTimeChatApp.Domain.pdb
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\obj\Debug\net6.0\RealTimeChatApp.Domain.csproj.AssemblyReference.cache
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\obj\Debug\net6.0\RealTimeChatApp.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\obj\Debug\net6.0\RealTimeChatApp.Domain.AssemblyInfoInputs.cache
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\obj\Debug\net6.0\RealTimeChatApp.Domain.AssemblyInfo.cs
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\obj\Debug\net6.0\RealTimeChatApp.Domain.csproj.CoreCompileInputs.cache
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\obj\Debug\net6.0\RealTimeChatApp.Domain.dll
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\obj\Debug\net6.0\refint\RealTimeChatApp.Domain.dll
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\obj\Debug\net6.0\RealTimeChatApp.Domain.pdb
+C:\Users\janvi\Desktop\Promact\MinimalChatApp-Backend\RealTimeChatApp-Backend\RealTimeChatApp.Domain\obj\Debug\net6.0\ref\RealTimeChatApp.Domain.dll
