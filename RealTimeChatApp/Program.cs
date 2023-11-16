@@ -11,6 +11,7 @@ using RealTimeChatApp.Domain.Models;
 using RealTimeChatApp.Hubs;
 using RealTimeChatApp.Middleware;
 using System.Text;
+using AutoMapper;
 
 namespace RealTimeChatApp
 {
@@ -34,9 +35,14 @@ namespace RealTimeChatApp
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            //builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddTransient<IMessageService, MessageService>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped<IGroupService, GroupService>();
             //builder.Services.AddScoped<IGenericRepository, GenericRepository>();
             builder.Services.AddSingleton<List<Message>>();
             builder.Services.AddScoped<ILogService, LogService>();
