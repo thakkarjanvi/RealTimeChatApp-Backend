@@ -10,7 +10,7 @@ namespace RealTimeChatApp.Domain.Models
     {
         public int MessageId { get; set; }
         public Guid SenderId { get; set; }
-        public Guid ReceiverId { get; set; }
+        public Guid? ReceiverId { get; set; }
         public string Content { get; set; }
         public DateTime Timestamp { get; set; }
         public int? ThreadId { get; set; }
@@ -21,7 +21,9 @@ namespace RealTimeChatApp.Domain.Models
         // One-to-many relationship with child messages
         public List<Message> Messages { get; set; }
 
-        
+        // Group Id for group messages
+        public Guid? GroupId { get; set; }
+        public Group Group { get; set; }
 
     }
 }

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\admin\\Documents\\Internship\\RealTimeChatApp-Backend\\RealTimeChatApp\\RealTimeChatApp.Domain\\RealTimeChatApp.Domain.csproj": {}
+    "C:\\Users\\janvi\\Desktop\\Promact\\MinimalChatApp-Backend\\RealTimeChatApp-Backend\\RealTimeChatApp.Domain\\RealTimeChatApp.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\admin\\Documents\\Internship\\RealTimeChatApp-Backend\\RealTimeChatApp\\RealTimeChatApp.Domain\\RealTimeChatApp.Domain.csproj": {
+    "C:\\Users\\janvi\\Desktop\\Promact\\MinimalChatApp-Backend\\RealTimeChatApp-Backend\\RealTimeChatApp.Domain\\RealTimeChatApp.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Documents\\Internship\\RealTimeChatApp-Backend\\RealTimeChatApp\\RealTimeChatApp.Domain\\RealTimeChatApp.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\janvi\\Desktop\\Promact\\MinimalChatApp-Backend\\RealTimeChatApp-Backend\\RealTimeChatApp.Domain\\RealTimeChatApp.Domain.csproj",
         "projectName": "RealTimeChatApp.Domain",
-        "projectPath": "C:\\Users\\admin\\Documents\\Internship\\RealTimeChatApp-Backend\\RealTimeChatApp\\RealTimeChatApp.Domain\\RealTimeChatApp.Domain.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Documents\\Internship\\RealTimeChatApp-Backend\\RealTimeChatApp\\RealTimeChatApp.Domain\\obj\\",
+        "projectPath": "C:\\Users\\janvi\\Desktop\\Promact\\MinimalChatApp-Backend\\RealTimeChatApp-Backend\\RealTimeChatApp.Domain\\RealTimeChatApp.Domain.csproj",
+        "packagesPath": "C:\\Users\\janvi\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\janvi\\Desktop\\Promact\\MinimalChatApp-Backend\\RealTimeChatApp-Backend\\RealTimeChatApp.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\janvi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -77,7 +77,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

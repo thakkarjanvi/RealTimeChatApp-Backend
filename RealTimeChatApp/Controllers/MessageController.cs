@@ -8,6 +8,7 @@ using RealTimeChatApp.Domain.DTO;
 using RealTimeChatApp.DAL.Services;
 using Microsoft.AspNetCore.SignalR;
 using RealTimeChatApp.Hubs;
+using RealTimeChatApp.DAL.Repository;
 
 namespace RealTimeChatApp.Controllers
 {
@@ -17,10 +18,10 @@ namespace RealTimeChatApp.Controllers
     public class MessageController : ControllerBase
     {
         private readonly IMessageService _messageService;
-        private readonly IGenericRepository _genericRepository;
+        private readonly IGenericRepository<Message> _genericRepository;
         private readonly IHubContext<ChatHub> _hubContext;
 
-        public MessageController(IMessageService messageService, IGenericRepository genericRepository, IHubContext<ChatHub> hubContext)
+        public MessageController(IMessageService messageService, IGenericRepository<Message> genericRepository, IHubContext<ChatHub> hubContext)
         {
             _messageService = messageService;
             _genericRepository = genericRepository;
@@ -169,7 +170,7 @@ namespace RealTimeChatApp.Controllers
                     return Unauthorized();
                 }
 
-                var messages = await _messageService.GetConversationHistoryAsync(queryParameters,currentUserId);
+                var messages = await _messageService.GetConversationHistoryAsync(queryParameters, currentUserId);
 
                 //if (messages.Count == 0)
                 //{
@@ -217,7 +218,7 @@ namespace RealTimeChatApp.Controllers
                 // Call the service to search for messages
                 var messages = await _messageService.SearchConversationAsync(query, currentUserId);
 
-                if(messages == null || messages.Count() == 0)
+                if (messages == null || messages.Count() == 0)
                 {
                     return NotFound(new { Message = "Messages not Found" });
                 }

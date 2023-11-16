@@ -1,5 +1,6 @@
 ﻿using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.SqlServer.Server;
@@ -175,6 +176,16 @@ namespace RealTimeChatApp.DAL.Services
                 Console.WriteLine($"Error: {ex.Message}");
                 throw; // Rethrow the exception to be handled in the controller if necessary
             }
+        }
+
+        public async Task<bool> GetUserByIdAsync(string userId)
+        {
+            var existUser = await _userManager.Users.FirstOrDefaultAsync(user => user.Id == userId);
+            if (existUser == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

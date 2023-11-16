@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RealTimeChatApp.Domain.Interfaces
 {
-    public interface IGenericRepository
+    public interface IGenericRepository<TEntity> where TEntity : class
     {
         Task AddMessageAsync(Message message);
         Task SaveChangesAsync();
@@ -19,6 +19,19 @@ namespace RealTimeChatApp.Domain.Interfaces
         // Task<Message> GetUserByIdAsync(Guid userId);
 
         //Task<User> GetUserByIdAsync(Guid userId);
+
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity> UpdateAsync(TEntity entity);
+        Task<bool> DeleteAsync(int id);
+        Task<TEntity> GetByIdAsync(int messageId);
+        Task<List<TEntity>> GetAllAsync();
+        Task<List<Group>> GetUserGroupsByUserIdAsync(string currentUserId);
+        Task<GroupMember> MemberExistsInGroupAsync(Guid groupId, string memberId);
+        Task<GroupMember> GetGroupMemberByIdAsync(string memberId);
+        Task<bool> DeleteAsync(TEntity entity);
+        Task<Group> GetGroupByIdAsync(Guid groupId);
+
+
 
     }
 }

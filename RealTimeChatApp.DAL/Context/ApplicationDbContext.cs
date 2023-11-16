@@ -34,11 +34,23 @@ namespace RealTimeChatApp.DAL.Context
                 .HasOne(m => m.Thread) // 
                 .WithMany(t => t.Messages) 
                 .HasForeignKey(m => m.ThreadId) 
-                .IsRequired(false);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Primary key configuration (assuming MessageId is primary key for Message entity)
             modelBuilder.Entity<Message>()
                 .HasKey(m => m.MessageId);
+
+            modelBuilder.Entity<Message>()
+                   .Property(m => m.SenderId).IsRequired(true);
+            modelBuilder.Entity<Message>()
+                   .Property(m => m.ReceiverId).IsRequired(false);
+            modelBuilder.Entity<Message>()
+                  .Property(m => m.Content).IsRequired(false);
+            modelBuilder.Entity<Message>()
+                  .Property(m => m.Timestamp).IsRequired(true);
+            modelBuilder.Entity<Message>()
+                  .Property(m => m.GroupId).IsRequired(false);
 
 
             modelBuilder.Entity<GroupMember>()
@@ -53,6 +65,11 @@ namespace RealTimeChatApp.DAL.Context
                 .HasOne(g => g.Group)
                 .WithMany(gu => gu.Members)
                 .HasForeignKey(g => g.GroupId);
+
+            modelBuilder.Entity<Message>()
+               .HasOne(m => m.Group)
+               .WithMany(g => g.Messages)
+               .HasForeignKey(m => m.GroupId);
 
         }
     }
