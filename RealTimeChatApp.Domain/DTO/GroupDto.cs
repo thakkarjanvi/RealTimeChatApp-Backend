@@ -9,10 +9,10 @@ namespace RealTimeChatApp.Domain.DTO
 {
     public class GroupDto
     {
-        public Guid Id { get; set; }
+       
         public string GroupName { get; set; }
 
         // Navigation property for GroupMembers
-        public List<GroupMember> Members { get; set; }
+        public List<Guid>? Members { get; set; }
     }
 }

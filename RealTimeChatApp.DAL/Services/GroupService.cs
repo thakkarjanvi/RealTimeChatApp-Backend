@@ -17,17 +17,17 @@ namespace RealTimeChatApp.DAL.Services
     {
         private readonly IGenericRepository<Group> _groupRepository;
         private readonly IGenericRepository<GroupMember> _groupMemberRepository;
-        private readonly IMapper _mapper;
         private readonly ApplicationDbContext _dbContext;
-        public GroupService(IGenericRepository<Group> groupRepository, IGenericRepository<GroupMember> groupMemberRepository, IMapper mapper, ApplicationDbContext dbContext)
+        public GroupService(IGenericRepository<Group> groupRepository, IGenericRepository<GroupMember> groupMemberRepository, ApplicationDbContext dbContext)
         {
             _groupRepository = groupRepository;
             _groupMemberRepository = groupMemberRepository;
             _dbContext = dbContext;
-            _mapper = mapper;
+           
         }
 
         //Create Group
+        // Create Group
         public async Task<ResponseGroupDto> CreateGroupAsync(string? currentUser, GroupDto groupDto)
         {
             var group = new Group
@@ -38,18 +38,10 @@ namespace RealTimeChatApp.DAL.Services
 
             Guid currentUserGuid = Guid.Parse(currentUser!);
 
-            if (!groupDto.Members!.Any(member => member.UserId == currentUserGuid.ToString()))
+            if (!groupDto.Members!.Contains(currentUserGuid))
             {
-                var groupMember = new GroupMember
-                {
-                    // Assuming appropriate initialization of other properties
-                    UserId = currentUserGuid.ToString(),
-                    // other properties...
-                };
-
-                groupDto.Members.Add(groupMember);
+                groupDto.Members.Add(currentUserGuid);
             }
-
 
             var addedGroup = await _groupRepository.AddAsync(group);
 
@@ -69,8 +61,17 @@ namespace RealTimeChatApp.DAL.Services
                 }
             }
 
-            return _mapper.Map<ResponseGroupDto>(addedGroup);
+            // Manually create ResponseGroupDto without AutoMapper
+            var responseGroupDto = new ResponseGroupDto
+            {
+                Id = addedGroup.Id,
+                GroupName = addedGroup.GroupName,
+                // Add other properties as needed
+            };
+
+            return responseGroupDto;
         }
+
 
         public async Task<string> AddMemberToGroupAsync(Guid groupId, string? currentUserId, AddGroupMemberDto addGroupMemberDto)
         {
