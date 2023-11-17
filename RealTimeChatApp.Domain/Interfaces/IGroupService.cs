@@ -16,6 +16,6 @@ namespace RealTimeChatApp.Domain.Interfaces
         Task<string> EditGroupNameAsync(Guid groupId, string newName);
         Task<string> MakeMemberAdminAsync(Guid groupId, Guid memberId, string? currentUserId);
         Task<string> DeleteGroupAsync(Guid groupId, string? currentUser);
-
+        Task<List<Group>> GetAllGroupsAsync();
     }
 }
