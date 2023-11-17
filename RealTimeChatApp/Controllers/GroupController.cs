@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RealTimeChatApp.DAL.Services;
 using RealTimeChatApp.Domain.DTO;
 using RealTimeChatApp.Domain.Interfaces;
+using RealTimeChatApp.Domain.Models;
 using System.Net;
 using System.Security.Claims;
 
 namespace RealTimeChatApp.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class GroupController : ControllerBase
@@ -43,6 +45,17 @@ namespace RealTimeChatApp.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
             }
+        }
+
+        //Retrive User List
+
+        
+        [HttpGet]
+        public async Task<IActionResult> GetAllGroups()
+        {
+            var groupDtos = await _groupService.GetAllGroupsAsync();
+
+            return Ok(groupDtos);
         }
 
         //Addmember
@@ -143,6 +156,7 @@ namespace RealTimeChatApp.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
             }
         }
+
 
 
     }

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using RealTimeChatApp.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
+//using System.Data.Entity;
 
 namespace RealTimeChatApp.DAL.Services
 {
@@ -26,7 +28,6 @@ namespace RealTimeChatApp.DAL.Services
            
         }
 
-        //Create Group
         // Create Group
         public async Task<ResponseGroupDto> CreateGroupAsync(string? currentUser, GroupDto groupDto)
         {
@@ -71,6 +72,24 @@ namespace RealTimeChatApp.DAL.Services
 
             return responseGroupDto;
         }
+
+        //Retrieve Group list
+
+        public async Task<List<Group>> GetAllGroupsAsync()
+        {
+            var groups = await _dbContext.Groups.ToListAsync();
+
+            var groupDtos = groups.Select(group => new Group
+            {
+                Id = group.Id,
+                GroupName = group.GroupName,
+                // Map other properties as needed
+            }).ToList();
+
+            return groupDtos;
+        }
+
+
 
 
         public async Task<string> AddMemberToGroupAsync(Guid groupId, string? currentUserId, AddGroupMemberDto addGroupMemberDto)
