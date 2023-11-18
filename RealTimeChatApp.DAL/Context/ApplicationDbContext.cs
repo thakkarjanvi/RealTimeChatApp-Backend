@@ -23,8 +23,6 @@ namespace RealTimeChatApp.DAL.Context
 
         public DbSet<Group> Groups { get; set; }
 
-        public DbSet<GroupChat> GroupChats { get; set; }
-
         public DbSet<GroupMember> GroupMembers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
