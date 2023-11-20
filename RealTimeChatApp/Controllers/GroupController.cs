@@ -47,8 +47,7 @@ namespace RealTimeChatApp.Controllers
             }
         }
 
-        //Retrive User List
-
+        //Retrive All Groups
         
         [HttpGet]
         public async Task<IActionResult> GetAllGroups()
